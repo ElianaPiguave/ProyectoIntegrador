@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+//libreria para mover el formulario
+using System.Runtime.InteropServices;
 
 namespace ProyectoIntegrador
 {
@@ -16,6 +18,10 @@ namespace ProyectoIntegrador
         {
             InitializeComponent();
         }
+        [DllImport("user32.Dll", EntryPoint = "ReleaseCapture")]
+        private extern static void ReleaseCapture();
+        [DllImport("user32.Dll", EntryPoint = "sendMessage")]
+        private extern static void sendMessage(System.IntPtr hand, int wmsg, int wparam, int lparam);
 
         private void txt_usu_Enter(object sender, EventArgs e)
         {
@@ -58,6 +64,28 @@ namespace ProyectoIntegrador
                 txt_contra.UseSystemPasswordChar = false;    
 
             }
+        }
+
+        private void btn_cerrar_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void btn_mini_Click(object sender, EventArgs e)
+        {
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void Form1_MouseDown(object sender, MouseEventArgs e)
+        {
+            ReleaseCapture();
+            sendMessage(this.Handle, 0x112, 0xf012, 0);
+        }
+
+        private void panel1_MouseDown(object sender, MouseEventArgs e)
+        {
+            ReleaseCapture();
+            sendMessage(this.Handle, 0x112, 0xf012, 0);
         }
     }
 }
